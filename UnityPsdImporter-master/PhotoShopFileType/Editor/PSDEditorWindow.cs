@@ -32,7 +32,7 @@ using UnityEditor;
 using UnityEngine;
 
 public class PSDEditorWindow : EditorWindow {
-    private Texture2D image;
+    private UnityEngine.Object image;
     private Vector2 scrollPos;
     private PsdFile psd;
     private int atlassize = 4096;
@@ -52,7 +52,7 @@ public class PSDEditorWindow : EditorWindow {
 
     public void OnGUI() {
         EditorGUI.BeginChangeCheck();
-        image = (Texture2D)EditorGUILayout.ObjectField("PSD File", image, typeof(Texture2D), true);
+         image = EditorGUILayout.ObjectField("PSD File", image, typeof(UnityEngine.Object), true);
         bool changed = EditorGUI.EndChangeCheck();
 
         if (image != null) {

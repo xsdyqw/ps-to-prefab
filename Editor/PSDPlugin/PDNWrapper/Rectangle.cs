@@ -104,7 +104,6 @@ namespace PDNWrapper
                 return Y;
             }
         }
-
         public int Right
         {
             get
