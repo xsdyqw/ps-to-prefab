@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab2e53987e4cafe4b91e62d262a1a858, type: 3}
   m_Name: changshi
   m_EditorClassIdentifier: 
-  psdFile: {fileID: -273872665213335351, guid: afdda10b7f33d8b49a923dd733e6137d, type: 3}
+  psdFile: {fileID: 2800000, guid: 6f50671465b3bb443b849291e3828143, type: 3}
   a: 0
   list: []
-  uiPrefab: {fileID: 0}
+  uiPrefab: {fileID: 2538171768324017650, guid: af1b8f6cb8a242540a98e0f36eeec648, type: 3}

@@ -37,8 +37,8 @@ public static class UiPsdImporterExtends
         if (name.Contains('<') || name.Contains('>'))
         {
             name = name.Replace('<', '_').Replace('>', '_');
-            name += layer.LayerID;
         }
+        name += layer.LayerID;
         return name;
     }
     public static LayerSectionInfo GetGroupInfo(this Layer layer)
@@ -89,11 +89,12 @@ public static class UiPsdImporterExtends
                 var groupInfo= layer.GetGroupInfo();
                 if (groupInfo!=null)
                 {
+                    Debug.LogError(layer.Name+ "  group   " + groupInfo.SectionType);
                     if(groupInfo.SectionType== LayerSectionType.SectionDivider)
                     {
                         groupStack.Push(assetPath.CreateGroup(layer, parentUi));
                     }
-                    else if(groupInfo.SectionType== LayerSectionType.ClosedFolder)
+                    else if(groupInfo.SectionType== LayerSectionType.ClosedFolder||groupInfo.SectionType== LayerSectionType.OpenFolder)
                     {
                         var groupUI= groupStack.Pop();
                         Bounds bounds = new Bounds();
@@ -127,6 +128,7 @@ public static class UiPsdImporterExtends
                 }
                 else
                 {
+                    Debug.LogError(layer.Name);
                     assetPath.CreateUI(layer, parentUi);
                 }
             }
