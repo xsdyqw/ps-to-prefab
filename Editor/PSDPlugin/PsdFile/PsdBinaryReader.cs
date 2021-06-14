@@ -58,12 +58,14 @@ namespace PhotoshopFile
         {
             return reader.ReadBytes(count);
         }
-
         public bool ReadBoolean()
         {
             return reader.ReadBoolean();
         }
-
+        public double ReadDouble()
+        {
+            return reader.ReadDouble();
+        }
         public Int16 ReadInt16()
         {
             var val = reader.ReadInt16();
@@ -192,7 +194,7 @@ namespace PhotoshopFile
 
             return str;
         }
-
+      
         //////////////////////////////////////////////////////////////////
 
         #region IDisposable
