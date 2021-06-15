@@ -40,7 +40,7 @@ public static class Impoter
             if (ext.Equals(".psd") || ext.Equals(".psb"))
             {
                 var uiObj= ScriptableObject.CreateInstance<PsdUiObject>();
-                uiObj.psdFile = obj;
+                uiObj.Init( obj);
                 AssetDatabase.CreateAsset(uiObj, Path.Combine(Path.GetDirectoryName(path), name+".asset"));
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();

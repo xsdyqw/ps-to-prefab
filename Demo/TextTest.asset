@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: TextTest
   m_EditorClassIdentifier: 
   psdFile: {fileID: 2800000, guid: a5c615d999af7f840a6cd35fc6823d12, type: 3}
-  a: 0
-  list: []
-  uiPrefab: {fileID: 0}
+  textScale: 3
+  uiPrefabList: []

@@ -15,21 +15,26 @@ function CheckLayer(layer){
             CheckLayer(layer.layers[i])
         }
     }
-    if (layer.name.search("=png")>=0)
-    {
-        ConvertToSmartObject(layer)
+    if(layer.typename == "LayerSet"){
+        if (layer.name.search("=png")>=0)
+		{
+			ConvertToSmartObject(layer)
+		}
     }else{
-        if(layer.typename == "LayerSet"){
-           
-        }else{
-            if (LayerKind.TEXT == layer.kind)
-            {
-                CheckText(layer);
-            }else{
-                //alert(layer.kind)
-            }
+		if (layer.name.search("=png")>=0)
+		{
+			ConvertToSmartObject(layer)
+		}
+        else if (LayerKind.TEXT == layer.kind)
+        {
+            CheckText(layer);
         }
+		//else{
+		//	layer.name=layer.name+"=png";
+		//	ConvertToSmartObject(layer)
+        //}
     }
+    
 }
 //转换图层为智能对象
 function ConvertToSmartObject(layer){
@@ -54,4 +59,15 @@ function ConvertToSmartObject(layer){
     app.activeDocument.activeLayer.name=name
 }
 function CheckText(layer){
+ 
+	if(layer.name.search("=text")>=0){
+		layer.name=layer.name.substring(0,layer.name.search("=text"));
+	}
+	var str=layer.name+"=text";
+	str+="["+layer.textItem.contents;
+	str+="|"+layer.textItem.font;
+	str+="|"+layer.textItem.size.value;
+	str+="|"+layer.textItem.color.rgb.hexValue;
+	str+="]"
+	layer.name=str;
 }

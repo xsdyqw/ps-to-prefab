@@ -13,6 +13,15 @@ MonoBehaviour:
   m_Name: "\u80CC\u5305"
   m_EditorClassIdentifier: 
   psdFile: {fileID: 2800000, guid: 7284cca6862b8cb46b2e6f4638e41135, type: 3}
-  a: 0
-  list: []
-  uiPrefab: {fileID: 9051342547380861748, guid: 1ea80ce6b91369742b6bff1ad211bfc1, type: 3}
+  textScale: 4
+  prefabList:
+  - key: "\u6807\u9898"
+    prefab: {fileID: 0}
+  - key: "\u9F20\u6807\u9009\u4E2D\u6548\u679C"
+    prefab: {fileID: 3656549964727839236, guid: 7896fe3fe70d896489331805145c54a7, type: 3}
+  - key: "\u5BFC\u822A\u5207\u6362"
+    prefab: {fileID: 1052052146946260844, guid: 2d2d9d423078a8c47a550ba16a197ad7, type: 3}
+  - key: "\u83DC\u5355\u56FE\u6807"
+    prefab: {fileID: 4719163354002412190, guid: f0c6dbcb0570f294aa1fdc51ba19731f, type: 3}
+  - key: "\u80CC\u5305"
+    prefab: {fileID: 8460871907795133908, guid: 7b5595b27af9c1f43adf1b5f0b0a9891, type: 3}
