@@ -23,16 +23,20 @@ public class Prefab
 }
 public class PsdUiObject: ScriptableObject
 {
+    [HideInInspector]
     [SerializeField]
     private UnityEngine.Object psdFile;
+
     public float textScale = 1;
     public List<Prefab> prefabList = new List<Prefab>();
+    public float autoanchoredRate = 0.1f;
+    [HideInInspector]
+    public List<Prefab> basePrefabList = new List<Prefab>();
 
 
     public Action SavePrefabAction;
     public Action LoadSpriteAction;
     public Action LoadPrefabAction;
-    
     public string AssetPath
     {
         get
@@ -45,6 +49,13 @@ public class PsdUiObject: ScriptableObject
         get
         {
             return Path.Combine(Path.GetDirectoryName(AssetPath),name);
+        }
+    }
+    public string ResourcesPath
+    {
+        get
+        {
+            return Path.Combine(RootPath, "BaseResources");
         }
     }
     public void Init(UnityEngine.Object psdFile)
@@ -72,10 +83,14 @@ public class PsdUiObject: ScriptableObject
         {
             Directory.CreateDirectory(RootPath);
         }
+        if (!Directory.Exists(ResourcesPath))
+        {
+            Directory.CreateDirectory(ResourcesPath);
+        }
         var root = this.CreateUIPrefabRoot();
         for (int i = 0; i < root.childCount; i++)
         {
-            var ui = root.GetChild(i);
+            var ui = root.GetChild(i) as RectTransform;
             if (ui.childCount > 0)
             {
                 this.SaveAsPrefab(ui);
@@ -146,6 +161,7 @@ public static class UiPsdImporterExtends
     {
         psdUi.LoadSpriteAction = null;
         psdUi.SavePrefabAction = null;
+        psdUi.LoadPrefabAction = null;
         Stack<RectTransform> groupStack = new Stack<RectTransform>();;
         var psd = new PsdFile(psdUi.AssetPath, new LoadContext { Encoding = System.Text.Encoding.Default });
         var name = Path.GetFileNameWithoutExtension(psdUi.AssetPath);
@@ -213,15 +229,15 @@ public static class UiPsdImporterExtends
                                     psdUi.SavePrefabAction += () =>
                                     {
                                         var index= groupUI.GetSiblingIndex();
-                                        var parent= groupUI.parent;
                                         psdUi.SaveAsPrefab(groupUI);
+                                    
                                     };
                                 }
                                 else if(layer.Name.Contains("=&prefab"))
                                 {
                                     psdUi.LoadPrefabAction += () =>
                                     {
-                                        psdUi.ChangeToPrefab(groupUI); 
+                                        var ui= psdUi.ChangeToPrefab(groupUI);
                                     };
                                    
                                 }
@@ -283,31 +299,78 @@ public static class UiPsdImporterExtends
         return null;
     }
     static List<GameObject> destoryList = new List<GameObject>();
-    public static void ChangeToPrefab(this PsdUiObject psdUi, RectTransform tempUi)
+    public static RectTransform ChangeToPrefab(this PsdUiObject psdUi, RectTransform tempUi)
     {
-      //  if (tempUi == null) return;
+        if (tempUi == null) Debug.LogError("tempUI IsNull " + tempUi);
         var prefab = psdUi.prefabList.GetPrefab(tempUi.name);
         if (prefab == null)
         {
             Debug.LogError("找不到预制体引用【" + tempUi.name + "】");
-            return;
+            return null;
         }
         var instancePrefab= PrefabUtility.InstantiatePrefab(prefab, tempUi.parent) as GameObject;
         var ui = instancePrefab.GetComponent<RectTransform>();
         instancePrefab.transform.SetSiblingIndex(tempUi.GetSiblingIndex());
         ui.anchoredPosition = tempUi.anchoredPosition;
-        ui.sizeDelta = tempUi.sizeDelta;
-        ui.anchorMin = tempUi.anchorMin;
-        ui.anchorMax = tempUi.anchorMax;
-        ui.offsetMax = tempUi.offsetMax;
-        ui.offsetMin = tempUi.offsetMin;
+        //ui.sizeDelta = tempUi.sizeDelta;
+        //ui.anchorMin = tempUi.anchorMin;
+        //ui.anchorMax = tempUi.anchorMax;
+        //ui.offsetMax = tempUi.offsetMax;
+        //ui.offsetMin = tempUi.offsetMin;
         destoryList.Add(tempUi.gameObject);
         //GameObject.DestroyImmediate(tempUi.gameObject);
+        return ui;
     }
-    public static void SaveAsPrefab(this PsdUiObject psdUi,Transform ui)
+    public static void SaveAsPrefab(this PsdUiObject psdUi,RectTransform ui)
     {
-        var uiPrefab=PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.RootPath, ui.name + ".prefab"), InteractionMode.AutomatedAction);
-        psdUi.prefabList.CheckAdd(new Prefab(uiPrefab));
+       var basePrefab=psdUi.basePrefabList.GetPrefab(ui.name + "Base");
+        if (basePrefab == null)
+        {
+            psdUi.Autoanchored(ui);
+            PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
+            var uiPrefab = psdUi.prefabList.GetPrefab(ui.name);
+            if (uiPrefab == null || uiPrefab.name != ui.name)
+            {
+                uiPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.RootPath, ui.name + ".prefab"), InteractionMode.AutomatedAction);
+                psdUi.prefabList.CheckAdd(new Prefab(uiPrefab));
+                return;
+            }
+        }
+        psdUi.LoadPrefabAction += () =>
+        {
+            psdUi.ChangeToPrefab(ui);
+        };
+    }
+    public static void Autoanchored(this PsdUiObject psdUi, RectTransform ui)
+    {
+        for (int i = 0; i < ui.childCount; i++)
+        {
+           
+            var child = ui.GetChild(i) as RectTransform;
+
+            var rightUpOffset = ui.UpRight() - child.UpRight();
+            var leftDonwOffset = child.DownLeft() - ui.DownLeft();
+
+            var widthCheck = psdUi.autoanchoredRate * ui.Width();
+            var heightCheck = psdUi.autoanchoredRate * ui.Height();
+
+        
+            if (rightUpOffset.x<widthCheck&& leftDonwOffset.x < widthCheck)
+            {
+                child.offsetMax = new Vector2(-rightUpOffset.x, child.offsetMax.y);
+                child.anchorMax = new Vector2(1, child.anchorMax.y);
+                child.offsetMin = new Vector2(leftDonwOffset.x, child.offsetMin.y);
+                child.anchorMin = new Vector2(0, child.anchorMin.y);
+            }
+            if (rightUpOffset.y < heightCheck && leftDonwOffset.y < heightCheck)
+            {
+                child.offsetMax = new Vector2( child.offsetMax.x, -rightUpOffset.y);
+                child.anchorMax = new Vector2(child.anchorMax.x,1 );
+                child.offsetMin = new Vector2(child.offsetMin.x,leftDonwOffset.y);
+                child.anchorMin = new Vector2(child.anchorMin.x,0);
+            }
+            psdUi.Autoanchored(child);
+        }
     }
     public static RectTransform CreateUIBase(this PsdUiObject psdUi, Layer layer, RectTransform parent = null)
     {
@@ -380,7 +443,7 @@ public static class UiPsdImporterExtends
        
         if (tex != null)
         {
-            string path = Path.Combine(psdUi.RootPath, psdUi.name + "_" + tex.name + ".png");
+            string path = Path.Combine(psdUi.ResourcesPath, psdUi.name + "_" + tex.name + ".png");
             File.WriteAllBytes(path, tex.EncodeToPNG());
             UnityEngine.Object.DestroyImmediate(tex);
             psdUi.LoadSpriteAction += () =>
@@ -645,3 +708,43 @@ public static class UiPsdImporterExtends
 
 //                }
 #endregion
+
+
+public static class RectTransformExtend
+{
+    public static Vector2 UpRightRectOffset(this RectTransform rectTransform)
+    {
+        return new Vector2(rectTransform.Width() * (1 - rectTransform.pivot.x), rectTransform.Height() * (1 - rectTransform.pivot.y));
+    }
+    public static Vector2 DownLeftRectOffset(this RectTransform rectTransform)
+    {
+        return new Vector2(rectTransform.Width() * (rectTransform.pivot.x), rectTransform.Height() * (rectTransform.pivot.y));
+    }
+
+    public static float Height(this RectTransform rectTransform)
+    {
+        return rectTransform.rect.size.y;
+    }
+    public static float Width(this RectTransform rectTransform)
+    {
+        return rectTransform.rect.size.x;
+    }
+    public static Vector2 Size(this RectTransform rectTransform)
+    {
+        return rectTransform.rect.size;
+    }
+ 
+    public static RectTransform RectTransform(this Transform transform)
+    {
+        return transform as RectTransform;
+    }
+    public static Vector2 UpRight(this RectTransform rectTransform)
+    {
+        return new Vector2(rectTransform.position.x, rectTransform.position.y) + rectTransform.UpRightRectOffset();
+    }
+    public static Vector2 DownLeft(this RectTransform rectTransform)
+    {
+        return new Vector2(rectTransform.position.x,rectTransform.position.y) - rectTransform.DownLeftRectOffset();
+    }
+  
+}
