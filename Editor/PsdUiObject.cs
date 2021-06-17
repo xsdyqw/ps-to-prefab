@@ -162,7 +162,7 @@ namespace QTool.Psd2Ui
         }
         public static string SaveName(this Layer layer)
         {
-            var name = layer.Name;
+            var name = layer.TrueName();
             if (name.Contains('+'))
             {
                 name.Replace('+', '_');
@@ -545,7 +545,6 @@ namespace QTool.Psd2Ui
         {
             if ((int)layer.Rect.Width == 0 || (int)layer.Rect.Width == 0)
                 return null;
-
             Texture2D tex = new Texture2D((int)layer.Rect.Width, (int)layer.Rect.Height, TextureFormat.RGBA32, true);
             Color32[] pixels = new Color32[tex.width * tex.height];
 
@@ -553,7 +552,6 @@ namespace QTool.Psd2Ui
             Channel green = (from l in layer.Channels where l.ID == 1 select l).First();
             Channel blue = (from l in layer.Channels where l.ID == 2 select l).First();
             Channel alpha = layer.AlphaChannel;
-
             for (int i = 0; i < pixels.Length; i++)
             {
                 byte r = red.ImageData[i];
@@ -561,6 +559,21 @@ namespace QTool.Psd2Ui
                 byte b = blue.ImageData[i];
                 byte a = 255;
 
+                if (layer.Name.Contains("white"))
+                {
+                    if (r > 0)
+                    {
+                        r = 255;
+                    }
+                    if (g > 0)
+                    {
+                        g = 255;
+                    }
+                    if (b > 0)
+                    {
+                        b = 255;
+                    }
+                }
                 if (alpha != null)
                     a = alpha.ImageData[i];
 
