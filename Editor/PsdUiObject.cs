@@ -394,14 +394,14 @@ namespace QTool.Psd2Ui
                     child.offsetMin = new Vector2(leftDonwOffset.x, child.offsetMin.y);
                     child.anchorMin = new Vector2(0, child.anchorMin.y);
                 }
-                else if(rightUpOffset.x<widthCheck*2&&leftDonwOffset.x>1-widthCheck*2)
+                else if(rightUpOffset.x<widthCheck*2&&leftDonwOffset.x>1-widthCheck*2+child.Width()/2)
                 {
                     child.offsetMax = new Vector2(-rightUpOffset.x, child.offsetMax.y);
                     child.anchorMax = new Vector2(1, child.anchorMax.y);
                     child.offsetMin = new Vector2(-(rightUpOffset.x+child.Width()), child.offsetMin.y);
                     child.anchorMin = new Vector2(1, child.anchorMin.y);
                 }
-                else if (rightUpOffset.x > 1 - widthCheck * 2 && leftDonwOffset.x < widthCheck * 2)
+                else if (rightUpOffset.x > 1 - widthCheck * 2 + child.Width() / 2 && leftDonwOffset.x < widthCheck * 2)
                 {
                     child.offsetMax = new Vector2(leftDonwOffset.x+child.Width(), child.offsetMax.y);
                     child.anchorMax = new Vector2(0, child.anchorMax.y);
@@ -415,7 +415,21 @@ namespace QTool.Psd2Ui
                     child.offsetMin = new Vector2(child.offsetMin.x, leftDonwOffset.y);
                     child.anchorMin = new Vector2(child.anchorMin.x, 0);
                 }
-                if(!UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(child.gameObject))
+                else if(rightUpOffset.y < heightCheck*2 && leftDonwOffset.y >1- heightCheck*2+child.Height()/2)
+                {
+                    child.offsetMax = new Vector2(child.offsetMax.x, -rightUpOffset.y);
+                    child.anchorMax = new Vector2(child.anchorMax.x, 1);
+                    child.offsetMin = new Vector2(child.offsetMin.x, -(rightUpOffset.y+child.Height()));
+                    child.anchorMin = new Vector2(child.anchorMin.x, 1);
+                }
+                else if (rightUpOffset.y > 1 - heightCheck * 2 + child.Height() / 2 && leftDonwOffset.y<heightCheck*2 )
+                {
+                    child.offsetMax = new Vector2(child.offsetMax.x, leftDonwOffset.y + child.Height());
+                    child.anchorMax = new Vector2(child.anchorMax.x, 0);
+                    child.offsetMin = new Vector2(child.offsetMin.x, leftDonwOffset.y);
+                    child.anchorMin = new Vector2(child.anchorMin.x, 0);
+                }
+                if (!UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(child.gameObject))
                 {
                     psdUi.Autoanchored(child);
                 }
