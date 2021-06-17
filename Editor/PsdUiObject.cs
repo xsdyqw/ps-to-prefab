@@ -339,13 +339,15 @@ namespace QTool.Psd2Ui
             var instancePrefab = PrefabUtility.InstantiatePrefab(prefab, tempUi.parent) as GameObject;
             var ui = instancePrefab.GetComponent<RectTransform>();
             instancePrefab.transform.SetSiblingIndex(tempUi.GetSiblingIndex());
-         //   ui.sizeDelta = tempUi.sizeDelta;
-            //ui.anchorMin = tempUi.anchorMin;
-            //ui.anchorMax = tempUi.anchorMax;
+            var size = ui.sizeDelta;
+           //  = tempUi.sizeDelta;
+            ui.anchorMin = tempUi.anchorMin;
+            ui.anchorMax = tempUi.anchorMax;
             ui.transform.position = tempUi.transform.position;
-            //ui.offsetMax = tempUi.offsetMax;
-            //ui.offsetMin = tempUi.offsetMin;
+            ui.offsetMax = tempUi.offsetMax;
+            ui.offsetMin = tempUi.offsetMin;
             destoryList.Add(tempUi.gameObject);
+            ui.sizeDelta = size;
             //GameObject.DestroyImmediate(tempUi.gameObject);
             return ui;
         }
