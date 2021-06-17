@@ -18,16 +18,18 @@ MonoBehaviour:
   - key: "\u6807\u9898"
     obj: {fileID: 0}
   - key: "\u9F20\u6807\u9009\u4E2D\u6548\u679C"
-    obj: {fileID: 7247015319190096599, guid: 2c99c44c99d082a4ebdd89713d957056, type: 3}
+    obj: {fileID: 5208843423599179444, guid: 2c99c44c99d082a4ebdd89713d957056, type: 3}
   - key: "\u5BFC\u822A\u5207\u6362"
-    obj: {fileID: 2397224170864005174, guid: e705127f600290843888870a2df07f20, type: 3}
+    obj: {fileID: 7158188066026838792, guid: e705127f600290843888870a2df07f20, type: 3}
   - key: "\u83DC\u5355\u56FE\u6807"
-    obj: {fileID: 7050263406065089560, guid: 2ffab3d950956674fb728b137c607f63, type: 3}
+    obj: {fileID: 4837793663919878774, guid: 2ffab3d950956674fb728b137c607f63, type: 3}
   - key: "\u4E0B\u65B9\u83DC\u5355\u680F"
     obj: {fileID: 0}
   - key: "\u80CC\u5305"
-    obj: {fileID: 1777010224753264218, guid: 95efe592d6870ed4a87f72d514882f02, type: 3}
+    obj: {fileID: 8091332105157521982, guid: 95efe592d6870ed4a87f72d514882f02, type: 3}
   - key: "\u9000\u51FAbutton"
+    obj: {fileID: 0}
+  - key: "\u5168\u90E8"
     obj: {fileID: 0}
   fontList:
   - key: Novecento-Bold

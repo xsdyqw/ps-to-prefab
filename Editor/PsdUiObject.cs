@@ -43,7 +43,9 @@ namespace QTool.Psd2Ui
         [HideInInspector]
         [SerializeField]
         private UnityEngine.Object psdFile;
-
+        [Range(0.1f,1f)]
+        public float uiSizeScale = 1;
+        [Range(0.1f, 5f)]
         public float textScale = 1;
         public List<Prefab> prefabList = new List<Prefab>();
         public List<FontRef> fontList = new List<FontRef>();
@@ -87,10 +89,16 @@ namespace QTool.Psd2Ui
                 if (layer.Name.Contains("=prefab"))
                 {
                     prefabList.CheckAdd<Prefab, GameObject>(new Prefab(layer.TrueName()));
-                }
-                if (layer.Name.Contains("=&prefab"))
+                }else if (layer.Name.Contains("=&prefab"))
                 {
                     prefabList.CheckAdd<Prefab, GameObject>(new Prefab(layer.TrueName()));
+                }else if (layer.Name.Contains("=text["))
+                {
+                    var startIndex = layer.Name.IndexOf("=text[") + "=text[".Length;
+                    var endIndex = layer.Name.IndexOf("]");
+                    var infos = layer.Name.Substring(startIndex, endIndex - startIndex).Split('|');
+                    var font = infos[1];
+                    fontList.CheckAdd<FontRef, Font>(new FontRef { key = font });
                 }
             }
         }
@@ -196,7 +204,7 @@ namespace QTool.Psd2Ui
             var psd = new PsdFile(psdUi.AssetPath, new LoadContext { Encoding = System.Text.Encoding.Default });
             var name = Path.GetFileNameWithoutExtension(psdUi.AssetPath);
             var root = new GameObject(name, typeof(RectTransform)).GetComponent<RectTransform>();
-            root.sizeDelta = new Vector2(psd.ColumnCount, psd.RowCount);
+            root.sizeDelta = new Vector2(psd.ColumnCount, psd.RowCount)*psdUi.uiSizeScale;
             foreach (var layer in psd.Layers)
             {
                 //var str = "";
@@ -411,8 +419,8 @@ namespace QTool.Psd2Ui
         public static RectTransform CreateUIBase(this PsdUiObject psdUi, Layer layer, RectTransform parent = null)
         {
             var ui = new GameObject(layer.TrueName(), typeof(RectTransform)).GetComponent<RectTransform>();
-            ui.sizeDelta = new Vector2(layer.Rect.Width, layer.Rect.Height);
-            ui.position = layer.Center() - parent.rect.size / 2;
+            ui.sizeDelta = new Vector2(layer.Rect.Width, layer.Rect.Height)*psdUi.uiSizeScale;
+            ui.position = layer.Center()*psdUi.uiSizeScale - parent.rect.size / 2;
             ui.SetParent(parent);
             ui.gameObject.SetActive(layer.Visible);
             return ui;
@@ -475,7 +483,7 @@ namespace QTool.Psd2Ui
             {
                 textUi.font = fontFile;
             }
-            textUi.fontSize = (int)(size * psdUi.textScale);
+            textUi.fontSize = (int)(size * psdUi.textScale/psdUi.uiSizeScale);
             //textUi.horizontalOverflow = HorizontalWrapMode.Overflow;
             textUi.verticalOverflow = VerticalWrapMode.Overflow;
             textUi.color = color;
