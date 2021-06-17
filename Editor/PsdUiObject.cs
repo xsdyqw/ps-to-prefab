@@ -413,7 +413,10 @@ namespace QTool.Psd2Ui
                     child.offsetMin = new Vector2(child.offsetMin.x, leftDonwOffset.y);
                     child.anchorMin = new Vector2(child.anchorMin.x, 0);
                 }
-                psdUi.Autoanchored(child);
+                if(!UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(child.gameObject))
+                {
+                    psdUi.Autoanchored(child);
+                }
             }
         }
         public static RectTransform CreateUIBase(this PsdUiObject psdUi, Layer layer, RectTransform parent = null)
