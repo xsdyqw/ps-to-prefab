@@ -339,10 +339,10 @@ namespace QTool.Psd2Ui
             var instancePrefab = PrefabUtility.InstantiatePrefab(prefab, tempUi.parent) as GameObject;
             var ui = instancePrefab.GetComponent<RectTransform>();
             instancePrefab.transform.SetSiblingIndex(tempUi.GetSiblingIndex());
-            ui.anchoredPosition = tempUi.anchoredPosition;
-            //ui.sizeDelta = tempUi.sizeDelta;
+         //   ui.sizeDelta = tempUi.sizeDelta;
             //ui.anchorMin = tempUi.anchorMin;
             //ui.anchorMax = tempUi.anchorMax;
+            ui.transform.position = tempUi.transform.position;
             //ui.offsetMax = tempUi.offsetMax;
             //ui.offsetMin = tempUi.offsetMin;
             destoryList.Add(tempUi.gameObject);
@@ -483,7 +483,7 @@ namespace QTool.Psd2Ui
             {
                 textUi.font = fontFile;
             }
-            textUi.fontSize = (int)(size * psdUi.textScale/psdUi.uiSizeScale);
+            textUi.fontSize = (int)(size * psdUi.textScale);
             //textUi.horizontalOverflow = HorizontalWrapMode.Overflow;
             textUi.verticalOverflow = VerticalWrapMode.Overflow;
             textUi.color = color;
