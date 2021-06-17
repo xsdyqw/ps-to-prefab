@@ -171,7 +171,7 @@ namespace QTool.Psd2Ui
             {
                 name = name.Replace('<', '_').Replace('>', '_');
             }
-            // name += layer.LayerID;
+            name += layer.LayerID;
             return name;
         }
         public static LayerSectionInfo GetGroupInfo(this Layer layer)
