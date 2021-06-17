@@ -12,48 +12,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab2e53987e4cafe4b91e62d262a1a858, type: 3}
   m_Name: "\u6D4B\u8BD5\u9875\u97622"
   m_EditorClassIdentifier: 
+  prefabList:
+  - key: "\u6807\u9898"
+    prefab: {fileID: 0}
+  - key: "\u9F20\u6807\u9009\u4E2D\u6548\u679C"
+    prefab: {fileID: 3829608266172819148, guid: 2c99c44c99d082a4ebdd89713d957056, type: 3}
+  - key: "\u5BFC\u822A\u5207\u6362"
+    prefab: {fileID: 4502283687061309263, guid: e705127f600290843888870a2df07f20, type: 3}
+  - key: "\u83DC\u5355\u56FE\u6807"
+    prefab: {fileID: 1485221408986636250, guid: 2ffab3d950956674fb728b137c607f63, type: 3}
+  - key: "\u4E0B\u65B9\u83DC\u5355\u680F"
+    prefab: {fileID: 0}
+  - key: "\u80CC\u5305"
+    prefab: {fileID: 2120103807562924196, guid: 95efe592d6870ed4a87f72d514882f02, type: 3}
+  - key: "\u9000\u51FAbutton"
+    prefab: {fileID: 0}
+  - key: "\u5168\u90E8"
+    prefab: {fileID: 0}
+  fontList: []
+  parentSetting: {fileID: 11400000, guid: 725b3c27ae6696241bf36462c4012fe0, type: 2}
   psdFile: {fileID: 2800000, guid: 7284cca6862b8cb46b2e6f4638e41135, type: 3}
   uiSizeScale: 0.48
   textScale: 2
-  prefabList:
-  - key: "\u6807\u9898"
-    obj: {fileID: 0}
-  - key: "\u9F20\u6807\u9009\u4E2D\u6548\u679C"
-    obj: {fileID: 7333328013145322594, guid: 2c99c44c99d082a4ebdd89713d957056, type: 3}
-  - key: "\u5BFC\u822A\u5207\u6362"
-    obj: {fileID: 5547356906866900564, guid: e705127f600290843888870a2df07f20, type: 3}
-  - key: "\u83DC\u5355\u56FE\u6807"
-    obj: {fileID: 7353454063214868555, guid: 2ffab3d950956674fb728b137c607f63, type: 3}
-  - key: "\u4E0B\u65B9\u83DC\u5355\u680F"
-    obj: {fileID: 0}
-  - key: "\u80CC\u5305"
-    obj: {fileID: 3878403279790178991, guid: 95efe592d6870ed4a87f72d514882f02, type: 3}
-  - key: "\u9000\u51FAbutton"
-    obj: {fileID: 0}
-  - key: "\u5168\u90E8"
-    obj: {fileID: 0}
-  fontList:
-  - key: Novecento-Bold
-    obj: {fileID: 0}
-  - key: SourceHanSansCN-Heavy
-    obj: {fileID: 0}
-  - key: SourceHanSansCN-Medium
-    obj: {fileID: 0}
-  - key: Novecentowide-Medium
-    obj: {fileID: 0}
-  - key: SourceHanSansCN-Regular
-    obj: {fileID: 0}
-  - key: Novecento-Normal
-    obj: {fileID: 0}
-  - key: SourceHanSansCN-Bold
-    obj: {fileID: 0}
   autoanchoredRate: 0.1
   basePrefabList:
   - key: "\u9F20\u6807\u9009\u4E2D\u6548\u679CBase"
-    obj: {fileID: 0}
+    prefab: {fileID: 0}
   - key: "\u5BFC\u822A\u5207\u6362Base"
-    obj: {fileID: 0}
+    prefab: {fileID: 0}
   - key: "\u83DC\u5355\u56FE\u6807Base"
-    obj: {fileID: 0}
+    prefab: {fileID: 0}
   - key: "\u80CC\u5305Base"
-    obj: {fileID: 0}
+    prefab: {fileID: 0}

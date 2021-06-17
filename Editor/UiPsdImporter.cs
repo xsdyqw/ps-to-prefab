@@ -12,8 +12,8 @@ namespace QTool.Psd2Ui
 {
     public static class Impoter
     {
-        [MenuItem("Assets/工具/psd|psb生成UI %u")]
-        static void CreateUI()
+        [MenuItem("Assets/工具/psd|psb生成UI导入设置 %u")]
+        static void CreateUIImportSetting()
         {
             foreach (var obj in Selection.objects)
             {
@@ -22,7 +22,7 @@ namespace QTool.Psd2Ui
                 var name = Path.GetFileNameWithoutExtension(path);
                 if (ext.Equals(".psd") || ext.Equals(".psb"))
                 {
-                    var uiObj = ScriptableObject.CreateInstance<PsdUiObject>();
+                    var uiObj = ScriptableObject.CreateInstance<UiImportSetting>();
                     uiObj.Init(obj);
                     AssetDatabase.CreateAsset(uiObj, Path.Combine(Path.GetDirectoryName(path), name + ".asset"));
                     AssetDatabase.SaveAssets();
