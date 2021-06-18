@@ -400,7 +400,6 @@ namespace QTool.Psd2Ui
             if (oldUi.name.StartsWith( newUI.name))
             {
                 var coms = oldUi.GetComponents(typeof(Component));
-                Debug.LogError("count " + coms.Length);
                 foreach (var com in coms)
                 {
                     var newCom = newUI.GetComponent(com.GetType());
