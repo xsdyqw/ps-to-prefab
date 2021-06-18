@@ -365,21 +365,21 @@ namespace QTool.Psd2Ui
             if (basePrefab == null)
             {
                 psdUi.Autoanchored(ui);
-                PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
+                psdUi.prefabList.Get(ui.name).prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
                 var uiPrefab = psdUi.prefabList.Get(ui.name,psdUi.parentSetting?.prefabList).prefab;
-                if (uiPrefab == null || uiPrefab.name != ui.name)
+                if (uiPrefab == null)
                 {
                     uiPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.RootPath, ui.name + ".prefab"), InteractionMode.AutomatedAction);
-                    psdUi.prefabList.Get(uiPrefab.name,psdUi.parentSetting?.prefabList).prefab=uiPrefab;
+                    psdUi.prefabList.Get(ui.name).prefab=uiPrefab;
                     return;
                 }
             }
-
-
+          
             psdUi.LoadPrefabAction += () =>
             {
                 psdUi.ChangeToPrefab(ui);
             };
+
         }
         public static void Autoanchored(this UiImportSetting psdUi, RectTransform ui)
         {
