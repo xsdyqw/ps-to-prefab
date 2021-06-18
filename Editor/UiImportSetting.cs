@@ -399,9 +399,13 @@ namespace QTool.Psd2Ui
         {
             if (oldUi.name.StartsWith( newUI.name))
             {
-                var coms = oldUi.GetComponents(typeof(Component));
+                Component[] coms = new Component[3];
+                coms[0] = oldUi.GetComponent<RectTransform>();
+                coms[1] = oldUi.GetComponent<Image>();
+                coms[2] = oldUi.GetComponent<Text>();
                 foreach (var com in coms)
                 {
+                    if (com == null) continue;
                     var newCom = newUI.GetComponent(com.GetType());
                     if (newCom != null)
                     {
