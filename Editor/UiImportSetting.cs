@@ -339,10 +339,19 @@ namespace QTool.Psd2Ui
         {
             if (tempUi == null) Debug.LogError("tempUI IsNull " + tempUi);
             var prefab = psdUi.prefabList.Get(tempUi.name,psdUi.parentSetting?.prefabList).prefab;
+           
             if (prefab == null)
             {
                 Debug.LogError("»±…Ÿ‘§÷∆ÃÂ°æ" + tempUi.name + "°ø");
                 return null;
+            }
+            if (UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(tempUi.gameObject))
+            {
+                var prefabAsset = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource(tempUi.gameObject);
+                if (prefab == prefabAsset)
+                {
+                    return null;
+                }
             }
             var instancePrefab = PrefabUtility.InstantiatePrefab(prefab, tempUi.parent) as GameObject;
             var ui = instancePrefab.GetComponent<RectTransform>();
