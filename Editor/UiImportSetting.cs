@@ -373,12 +373,17 @@ namespace QTool.Psd2Ui
             var basePrefab = psdUi.basePrefabList.CheckGet(ui.name + "Base").prefab;
             psdUi.Autoanchored(ui);
             psdUi.basePrefabList.CheckGet(ui.name + "Base").prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
-
+        
             var uiPrefab = psdUi.prefabList.CheckGet(ui.name, psdUi.parentSetting?.prefabList).prefab;
             if (uiPrefab == null)
             {
-                uiPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.RootPath, ui.name + ".prefab"), InteractionMode.AutomatedAction);
-                psdUi.prefabList.CheckGet(ui.name).prefab = uiPrefab;
+                var newUi = new GameObject(ui.name, typeof(RectTransform)).GetComponent<RectTransform>();
+                newUi.SetParent(ui.parent);
+                newUi.sizeDelta = ui.sizeDelta;
+                newUi.position = ui.position;
+                ui.SetParent(newUi);
+                uiPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(newUi.gameObject, Path.Combine(psdUi.RootPath, newUi.name + ".prefab"), InteractionMode.AutomatedAction);
+                psdUi.prefabList.CheckGet(newUi.name).prefab = uiPrefab;
                 return;
             }
             psdUi.LoadPrefabAction += () =>
