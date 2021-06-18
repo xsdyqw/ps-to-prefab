@@ -100,10 +100,10 @@ namespace QTool.Psd2Ui
                 var name = layer.TrueName();
                 if (layer.Name.Contains("=prefab"))
                 {
-                    prefabList.Get(layer.TrueName(),parentSetting?.prefabList);
+                    prefabList.CheckGet(layer.TrueName(),parentSetting?.prefabList);
                 }else if (layer.Name.Contains("=&prefab"))
                 {
-                    prefabList.Get(layer.TrueName(),parentSetting?.prefabList);
+                    prefabList.CheckGet(layer.TrueName(),parentSetting?.prefabList);
                 }
                 else if (layer.Name.Contains("=text["))
                 {
@@ -111,7 +111,7 @@ namespace QTool.Psd2Ui
                     var endIndex = layer.Name.IndexOf("]");
                     var infos = layer.Name.Substring(startIndex, endIndex - startIndex).Split('|');
                     var font = infos[1];
-                    fontList.Get( font,parentSetting?.fontList );
+                    fontList.CheckGet( font,parentSetting?.fontList );
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace QTool.Psd2Ui
 
     public static class UiPsdImporterExtends
     {
-        public static T Get<T>(this List<T> objList, string key, List<T> parentList = null) where T : IKey,new() 
+        public static T CheckGet<T>(this List<T> objList, string key, List<T> parentList = null) where T : IKey,new() 
         {
             foreach (var kv in objList)
             {
@@ -338,7 +338,7 @@ namespace QTool.Psd2Ui
         public static RectTransform ChangeToPrefab(this UiImportSetting psdUi, RectTransform tempUi)
         {
             if (tempUi == null) Debug.LogError("tempUI IsNull " + tempUi);
-            var prefab = psdUi.prefabList.Get(tempUi.name,psdUi.parentSetting?.prefabList).prefab;
+            var prefab = psdUi.prefabList.CheckGet(tempUi.name,psdUi.parentSetting?.prefabList).prefab;
            
             if (prefab == null)
             {
@@ -370,16 +370,16 @@ namespace QTool.Psd2Ui
         }
         public static void SaveAsPrefab(this UiImportSetting psdUi, RectTransform ui)
         {
-            var basePrefab = psdUi.basePrefabList.Get(ui.name + "Base").prefab;
+            var basePrefab = psdUi.basePrefabList.CheckGet(ui.name + "Base").prefab;
             if (basePrefab == null)
             {
                 psdUi.Autoanchored(ui);
-                psdUi.basePrefabList.Get(ui.name+"Base").prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
-                var uiPrefab = psdUi.prefabList.Get(ui.name,psdUi.parentSetting?.prefabList).prefab;
+                psdUi.basePrefabList.CheckGet(ui.name+"Base").prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
+                var uiPrefab = psdUi.prefabList.CheckGet(ui.name,psdUi.parentSetting?.prefabList).prefab;
                 if (uiPrefab == null)
                 {
                     uiPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.RootPath, ui.name + ".prefab"), InteractionMode.AutomatedAction);
-                    psdUi.prefabList.Get(ui.name).prefab=uiPrefab;
+                    psdUi.prefabList.CheckGet(ui.name).prefab=uiPrefab;
                     return;
                 }
             }
@@ -512,7 +512,7 @@ namespace QTool.Psd2Ui
             var textUi = ui.gameObject.AddComponent<Text>();
             ui.sizeDelta += Vector2.one * 4;
             textUi.text = text;
-            var fongSetting= psdUi.fontList.Get(font,psdUi.parentSetting?.fontList);
+            var fongSetting= psdUi.fontList.CheckGet(font,psdUi.parentSetting?.fontList);
             textUi.fontSize = (int)(size * psdUi.TextScale);
             if (fongSetting.font == null)
             {
