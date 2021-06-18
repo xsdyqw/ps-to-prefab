@@ -12,7 +12,7 @@ namespace QTool.Psd2Ui
 {
     public interface IKey
     {
-        public string Key { get; set; }
+        string Key { get; set; }
     }
     [System.Serializable]
     public class FontRef :IKey
@@ -523,8 +523,11 @@ namespace QTool.Psd2Ui
                 textUi.font = fongSetting.font;
                 textUi.transform.position += Vector3.up * fongSetting.YOffset * textUi.fontSize;
             }
-          
-            //textUi.horizontalOverflow = HorizontalWrapMode.Overflow;
+
+            if (textUi.rectTransform.Height() < textUi.font.fontSize * 1.8f)
+            {
+                textUi.horizontalOverflow = HorizontalWrapMode.Overflow;
+            }
             textUi.verticalOverflow = VerticalWrapMode.Overflow;
             textUi.color = color;
             return textUi;
