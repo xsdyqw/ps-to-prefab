@@ -412,7 +412,11 @@ namespace QTool.Psd2Ui
                 }
                 for (int i = 0; i < oldUi.childCount && i < newUI.childCount; i++)
                 {
-                    oldUi.GetChild(i).ChangeTo(newUI.GetChild(i));
+                    if (!UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(oldUi.GetChild(i).gameObject))
+                    {
+                        oldUi.GetChild(i).ChangeTo(newUI.GetChild(i));
+                    }
+                 
                 }
             }
            
