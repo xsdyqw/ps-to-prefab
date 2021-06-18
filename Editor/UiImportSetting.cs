@@ -371,19 +371,16 @@ namespace QTool.Psd2Ui
         public static void SaveAsPrefab(this UiImportSetting psdUi, RectTransform ui)
         {
             var basePrefab = psdUi.basePrefabList.CheckGet(ui.name + "Base").prefab;
-            if (basePrefab == null)
+            psdUi.Autoanchored(ui);
+            psdUi.basePrefabList.CheckGet(ui.name + "Base").prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
+
+            var uiPrefab = psdUi.prefabList.CheckGet(ui.name, psdUi.parentSetting?.prefabList).prefab;
+            if (uiPrefab == null)
             {
-                psdUi.Autoanchored(ui);
-                psdUi.basePrefabList.CheckGet(ui.name+"Base").prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
-                var uiPrefab = psdUi.prefabList.CheckGet(ui.name,psdUi.parentSetting?.prefabList).prefab;
-                if (uiPrefab == null)
-                {
-                    uiPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.RootPath, ui.name + ".prefab"), InteractionMode.AutomatedAction);
-                    psdUi.prefabList.CheckGet(ui.name).prefab=uiPrefab;
-                    return;
-                }
+                uiPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.RootPath, ui.name + ".prefab"), InteractionMode.AutomatedAction);
+                psdUi.prefabList.CheckGet(ui.name).prefab = uiPrefab;
+                return;
             }
-          
             psdUi.LoadPrefabAction += () =>
             {
                 psdUi.ChangeToPrefab(ui);
