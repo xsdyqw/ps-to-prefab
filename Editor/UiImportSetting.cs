@@ -386,6 +386,7 @@ namespace QTool.Psd2Ui
             else
             {
                 basePrefab.transform.ChangeTo(ui);
+                PrefabUtility.SavePrefabAsset(basePrefab);
             }
           
             psdUi.LoadPrefabAction += () =>
@@ -396,16 +397,18 @@ namespace QTool.Psd2Ui
         }
         public static void ChangeTo(this Transform oldUi, Transform newUI)
         {
-            if (oldUi.name == newUI.name)
+            if (oldUi.name.StartsWith( newUI.name))
             {
                 var coms = oldUi.GetComponents(typeof(Component));
+                Debug.LogError("count " + coms.Length);
                 foreach (var com in coms)
                 {
                     var newCom = newUI.GetComponent(com.GetType());
                     if (newCom != null)
                     {
-                        UnityEditorInternal.ComponentUtility.CopyComponent(com);
-                        UnityEditorInternal.ComponentUtility.PasteComponentValues(newCom);
+                        UnityEditorInternal.ComponentUtility.CopyComponent(newCom);
+                        UnityEditorInternal.ComponentUtility.PasteComponentValues(com);
+                      
                     }
                 }
                 for (int i = 0; i < oldUi.childCount && i < newUI.childCount; i++)
@@ -549,7 +552,7 @@ namespace QTool.Psd2Ui
                 textUi.transform.position += Vector3.up * fongSetting.YOffset * textUi.fontSize;
             }
 
-            if (textUi.rectTransform.Height() < textUi.font.fontSize * 1.8f)
+            if (textUi.rectTransform.Height() < textUi.fontSize * 1.8f)
             {
                 textUi.horizontalOverflow = HorizontalWrapMode.Overflow;
             }

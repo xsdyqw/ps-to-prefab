@@ -16,31 +16,31 @@ MonoBehaviour:
   - key: "\u6807\u9898"
     prefab: {fileID: 0}
   - key: "\u9F20\u6807\u9009\u4E2D\u6548\u679C"
-    prefab: {fileID: 3829608266172819148, guid: 2c99c44c99d082a4ebdd89713d957056, type: 3}
+    prefab: {fileID: 4808110781772962321, guid: 2c99c44c99d082a4ebdd89713d957056, type: 3}
   - key: "\u5BFC\u822A\u5207\u6362"
-    prefab: {fileID: 4502283687061309263, guid: e705127f600290843888870a2df07f20, type: 3}
+    prefab: {fileID: 6034310643079143104, guid: e705127f600290843888870a2df07f20, type: 3}
   - key: "\u83DC\u5355\u56FE\u6807"
-    prefab: {fileID: 1485221408986636250, guid: 2ffab3d950956674fb728b137c607f63, type: 3}
+    prefab: {fileID: 486552488827086461, guid: 2ffab3d950956674fb728b137c607f63, type: 3}
   - key: "\u4E0B\u65B9\u83DC\u5355\u680F"
     prefab: {fileID: 0}
   - key: "\u80CC\u5305"
-    prefab: {fileID: 2120103807562924196, guid: 95efe592d6870ed4a87f72d514882f02, type: 3}
+    prefab: {fileID: 7460218139182949344, guid: 95efe592d6870ed4a87f72d514882f02, type: 3}
   - key: "\u9000\u51FAbutton"
     prefab: {fileID: 0}
   - key: "\u5168\u90E8"
     prefab: {fileID: 0}
   fontList: []
-  parentSetting: {fileID: 11400000, guid: 725b3c27ae6696241bf36462c4012fe0, type: 2}
-  psdFile: {fileID: 2800000, guid: 7284cca6862b8cb46b2e6f4638e41135, type: 3}
   uiSizeScale: 0.48
   textScale: 2
   autoanchoredRate: 0.1
+  parentSetting: {fileID: 11400000, guid: 725b3c27ae6696241bf36462c4012fe0, type: 2}
+  psdFile: {fileID: 2800000, guid: 7284cca6862b8cb46b2e6f4638e41135, type: 3}
   basePrefabList:
   - key: "\u9F20\u6807\u9009\u4E2D\u6548\u679CBase"
-    prefab: {fileID: 0}
+    prefab: {fileID: 5384306883076452963, guid: 205d96d1c0efb13488cc345ee4e690fe, type: 3}
   - key: "\u5BFC\u822A\u5207\u6362Base"
-    prefab: {fileID: 0}
+    prefab: {fileID: 3816922529153683110, guid: 9894946e9e796b8479656c6a5eab4cc8, type: 3}
   - key: "\u83DC\u5355\u56FE\u6807Base"
-    prefab: {fileID: 0}
+    prefab: {fileID: 2641521528810137497, guid: bbf417869148a644697329f609bbbf77, type: 3}
   - key: "\u80CC\u5305Base"
-    prefab: {fileID: 0}
+    prefab: {fileID: 5517251893946953928, guid: 7162187ec66fc5d43a6c3412bb8b8c65, type: 3}
