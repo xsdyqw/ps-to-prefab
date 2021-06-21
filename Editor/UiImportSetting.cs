@@ -371,76 +371,60 @@ namespace QTool.Psd2Ui
         public static void SaveAsPrefab(this UiImportSetting psdUi, RectTransform ui)
         {
             var basePrefab = psdUi.basePrefabList.CheckGet(ui.name + "Base").prefab;
-
-            psdUi.Autoanchored(ui);
-            psdUi.basePrefabList.CheckGet(ui.name + "Base").prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
-            //if (basePrefab == null)
-            //{
-             
-            //}
-            //else
-            //{
-            //    PrefabUtility.SavePrefabAsset(basePrefab);
-            //}
-            var uiPrefab = psdUi.prefabList.CheckGet(ui.name, psdUi.parentSetting?.prefabList).prefab;
-            if (uiPrefab == null)
+            if (basePrefab == null)
             {
-                uiPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.RootPath, ui.name + ".prefab"), InteractionMode.AutomatedAction);
-                psdUi.prefabList.CheckGet(ui.name).prefab = uiPrefab;
-                return;
+                psdUi.Autoanchored(ui);
+                psdUi.basePrefabList.CheckGet(ui.name+"Base").prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
+                var uiPrefab = psdUi.prefabList.CheckGet(ui.name,psdUi.parentSetting?.prefabList).prefab;
+                if (uiPrefab == null)
+                {
+                    uiPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.RootPath, ui.name + ".prefab"), InteractionMode.AutomatedAction);
+                    psdUi.prefabList.CheckGet(ui.name).prefab=uiPrefab;
+                    return;
+                }
             }
+            else
+            {
+                basePrefab.transform.ChangeTo(ui);
+                PrefabUtility.SavePrefabAsset(basePrefab);
+            }
+          
             psdUi.LoadPrefabAction += () =>
             {
                 psdUi.ChangeToPrefab(ui);
             };
 
         }
-        //public static void ChangeTo(this Transform oldUi, Transform newUI)
-        //{
-        //    var oldName = oldUi.name;
-        //    if (oldName.StartsWith( newUI.name))
-        //    {
-        //        Component[] coms = new Component[3];
-        //        coms[0] = oldUi.GetComponent<RectTransform>();
-        //        coms[1] = oldUi.GetComponent<Image>();
-        //        coms[2] = oldUi.GetComponent<Text>();
-        //        foreach (var com in coms)
-        //        {
-        //            if (com == null) continue;
-        //            var newCom = newUI.GetComponent(com.GetType());
-        //            if (newCom != null)
-        //            {
-        //                UnityEditorInternal.ComponentUtility.CopyComponent(newCom);
-        //                UnityEditorInternal.ComponentUtility.PasteComponentValues(com);
+        public static void ChangeTo(this Transform oldUi, Transform newUI)
+        {
+            if (oldUi.name.StartsWith( newUI.name))
+            {
+                Component[] coms = new Component[3];
+                coms[0] = oldUi.GetComponent<RectTransform>();
+                coms[1] = oldUi.GetComponent<Image>();
+                coms[2] = oldUi.GetComponent<Text>();
+                foreach (var com in coms)
+                {
+                    if (com == null) continue;
+                    var newCom = newUI.GetComponent(com.GetType());
+                    if (newCom != null)
+                    {
+                        UnityEditorInternal.ComponentUtility.CopyComponent(newCom);
+                        UnityEditorInternal.ComponentUtility.PasteComponentValues(com);
                       
-        //            }
-        //        }
-        //        for (int i = 0; i < newUI.childCount; i++)
-        //        {
-                
-        //            var newChild = newUI.GetChild(i);
-        //            var oldChild = i<oldUi.childCount?oldUi.GetChild(i):null;
-        //            if (oldChild == null || !oldChild.name.StartsWith(newChild.name))
-        //            {
-                  
-        //                oldChild=oldUi.Find(newChild.name);
-        //                if (oldChild == null)
-        //                {
-        //                    Debug.LogError("¶ªÊ§[" + newChild.name + "]");
-        //                    oldChild = new GameObject(newChild.name, typeof(RectTransform)).GetComponent<RectTransform>();
-        //                    oldChild.SetParent(oldUi);
-        //                    oldChild.SetSiblingIndex(i);
-        //                }
-        //            }
-        //            if (!UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(oldUi.gameObject))
-        //            {
-        //                oldChild.ChangeTo(newChild);
-        //            }
+                    }
+                }
+                for (int i = 0; i < oldUi.childCount && i < newUI.childCount; i++)
+                {
+                    if (!UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(oldUi.GetChild(i).gameObject))
+                    {
+                        oldUi.GetChild(i).ChangeTo(newUI.GetChild(i));
+                    }
                  
-        //        }
-        //    }
+                }
+            }
            
-        //}
+        }
         public static void Autoanchored(this UiImportSetting psdUi, RectTransform ui)
         {
             for (int i = 0; i < ui.childCount; i++)
