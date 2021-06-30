@@ -179,7 +179,6 @@ namespace QTool.Psd2Ui
             {
                 name = name.Replace('<', '_').Replace('>', '_');
             }
-            name += layer.LayerID;
             return name;
         }
         public static LayerSectionInfo GetGroupInfo(this Layer layer)
@@ -642,6 +641,10 @@ namespace QTool.Psd2Ui
 
             tex.SetPixels32(pixels);
             tex.name = layer.SaveName();
+            if (!layer.Name.Contains("=png"))
+            {
+                tex.name += layer.LayerID;
+            }
             tex.Apply();
             return tex;
         }
