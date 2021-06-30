@@ -276,6 +276,7 @@ namespace QTool.Psd2Ui
                                     {
                                         psdUi.SavePrefabAction += () =>
                                         {
+                                            if (groupUI == null) return;
                                             var index = groupUI.GetSiblingIndex();
                                             psdUi.SaveAsPrefab(groupUI);
 
