@@ -12,13 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab2e53987e4cafe4b91e62d262a1a858, type: 3}
   m_Name: "\u6D4B\u8BD5\u9875\u97621"
   m_EditorClassIdentifier: 
-  psdFile: {fileID: 2800000, guid: 5a1039847630a81438b1f28e6b2af763, type: 3}
-  textScale: 4
-  prefabList:
-  - key: "\u6D4B\u8BD5UI"
-    obj: {fileID: 5797687469784432225, guid: 08b9722cf22b8f641ae58d83b834a5aa, type: 3}
+  prefabList: []
   fontList: []
+  uiSizeScale: 1
+  textScale: 1
   autoanchoredRate: 0.1
-  basePrefabList:
-  - key: "\u6D4B\u8BD5UIBase"
-    obj: {fileID: 0}
+  parentSetting: {fileID: 0}
+  psdFile: {fileID: 2800000, guid: 5a1039847630a81438b1f28e6b2af763, type: 3}
+  basePrefabList: []
+  toPrefabUi: []
