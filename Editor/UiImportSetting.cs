@@ -270,11 +270,6 @@ namespace QTool.Psd2Ui
                                     }
                                     groupUI.name = layer.TrueName();
                                     groupUI.gameObject.SetActive(layer.Visible);
-                                    if (layer.Name.StartsWith("~"))
-                                    {
-                                        GameObject.DestroyImmediate(groupUI);
-                                        continue;
-                                    }
                                     if (layer.Name.Contains("=prefab"))
                                     {
                                         psdUi.SavePrefabAction += () =>
