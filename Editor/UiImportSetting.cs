@@ -283,7 +283,7 @@ namespace QTool.Psd2Ui
                                     {
                                         psdUi.LoadPrefabAction += () =>
                                         {
-                                            var ui = psdUi.ChangeToPrefab(groupUI);
+                                            psdUi.ChangeToPrefab(groupUI);
                                         };
 
                                     }
@@ -314,11 +314,12 @@ namespace QTool.Psd2Ui
             psdUi.LoadSpriteAction?.Invoke();
             psdUi.SavePrefabAction?.Invoke();
             psdUi.LoadPrefabAction?.Invoke();
-            foreach (var item in destoryList)
-            {
-                GameObject.DestroyImmediate(item);
-            }
-            destoryList.Clear();
+            //foreach (var item in destoryList)
+            //{
+            //    Debug.LogError("É¾³ý " + item);
+            //    GameObject.DestroyImmediate(item);
+            //}
+            //destoryList.Clear();
             return root;
         }
         public static Vector2 Center(this Layer layer)
@@ -334,23 +335,25 @@ namespace QTool.Psd2Ui
             return layer.Name.Contains("=") ? (layer.Name.Substring(0, layer.Name.IndexOf("="))) : layer.Name;
         }
      
-        static List<GameObject> destoryList = new List<GameObject>();
-        public static RectTransform ChangeToPrefab(this UiImportSetting psdUi, RectTransform tempUi)
+       // static List<GameObject> destoryList = new List<GameObject>();
+        public static void ChangeToPrefab(this UiImportSetting psdUi, RectTransform tempUi)
         {
-            if (tempUi == null) Debug.LogError("tempUI IsNull " + tempUi);
+            if (tempUi == null) return;
+
+        
             var prefab = psdUi.prefabList.CheckGet(tempUi.name,psdUi.parentSetting?.prefabList).prefab;
            
             if (prefab == null)
             {
                 Debug.LogError("È±ÉÙÔ¤ÖÆÌå¡¾" + tempUi.name + "¡¿");
-                return null;
+                return ;
             }
             if (UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(tempUi.gameObject))
             {
                 var prefabAsset = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource(tempUi.gameObject);
                 if (prefab == prefabAsset)
                 {
-                    return null;
+                    return ;
                 }
             }
             var instancePrefab = PrefabUtility.InstantiatePrefab(prefab, tempUi.parent) as GameObject;
@@ -363,10 +366,10 @@ namespace QTool.Psd2Ui
             ui.transform.position = tempUi.transform.position;
             ui.offsetMax = tempUi.offsetMax;
             ui.offsetMin = tempUi.offsetMin;
-            destoryList.Add(tempUi.gameObject);
+          
             ui.sizeDelta = size;
-            //GameObject.DestroyImmediate(tempUi.gameObject);
-            return ui;
+          //  destoryList.Add(tempUi.gameObject);
+            GameObject.DestroyImmediate(tempUi.gameObject);
         }
         public static void SaveAsPrefab(this UiImportSetting psdUi, RectTransform ui)
         {
@@ -387,13 +390,8 @@ namespace QTool.Psd2Ui
             {
                 basePrefab.transform.ChangeTo(ui);
                 PrefabUtility.SavePrefabAsset(basePrefab);
-            }
-          
-            psdUi.LoadPrefabAction += () =>
-            {
                 psdUi.ChangeToPrefab(ui);
-            };
-
+            }
         }
         public static void ChangeTo(this Transform oldUi, Transform newUI)
         {
