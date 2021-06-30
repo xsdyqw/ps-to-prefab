@@ -522,6 +522,7 @@ namespace QTool.Psd2Ui
                 image.color = new Color(1, 1, 1, layer.Opacity / 255f);
                 psdUi.GetSprite(layer, (sprite) =>
                 {
+                    if (image == null) return;
                     image.sprite = sprite;
                 });
             }
