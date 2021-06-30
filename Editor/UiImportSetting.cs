@@ -66,7 +66,9 @@ namespace QTool.Psd2Ui
 
         public Action SavePrefabAction;
         public Action LoadSpriteAction;
-        public Action LoadPrefabAction;
+        [HideInInspector]
+        public List<RectTransform> toPrefabUi=new List<RectTransform>();
+       // public Action LoadPrefabAction;
         public string AssetPath
         {
             get
@@ -206,7 +208,8 @@ namespace QTool.Psd2Ui
         {
             psdUi.LoadSpriteAction = null;
             psdUi.SavePrefabAction = null;
-            psdUi.LoadPrefabAction = null;
+            psdUi.toPrefabUi.Clear();
+            //psdUi.LoadPrefabAction = null;
             Stack<RectTransform> groupStack = new Stack<RectTransform>(); ;
             var psd = new PsdFile(psdUi.AssetPath, new LoadContext { Encoding = System.Text.Encoding.Default });
             var name = Path.GetFileNameWithoutExtension(psdUi.AssetPath);
@@ -280,10 +283,11 @@ namespace QTool.Psd2Ui
                                     }
                                     else if (layer.Name.Contains("=&prefab"))
                                     {
-                                        psdUi.LoadPrefabAction += () =>
-                                        {
-                                            psdUi.ChangeToPrefab(groupUI);
-                                        };
+                                        psdUi.ChangeToPrefab(groupUI);
+                                        //psdUi.LoadPrefabAction += () =>
+                                        //{
+                                        //    psdUi.ChangeToPrefab(groupUI);
+                                        //};
 
                                     }
                                 }
@@ -313,7 +317,6 @@ namespace QTool.Psd2Ui
             AssetDatabase.Refresh();
             psdUi.LoadSpriteAction?.Invoke();
             psdUi.SavePrefabAction?.Invoke();
-            psdUi.LoadPrefabAction?.Invoke();
             //foreach (var item in destoryList)
             //{
             //    Debug.LogError("删除 " + item);
@@ -336,24 +339,29 @@ namespace QTool.Psd2Ui
         }
      
        // static List<GameObject> destoryList = new List<GameObject>();
-        public static void ChangeToPrefab(this UiImportSetting psdUi, RectTransform tempUi)
+        public static bool ChangeToPrefab(this UiImportSetting psdUi, RectTransform tempUi)
         {
-            if (tempUi == null) return;
+            if (tempUi == null) return true;
 
         
             var prefab = psdUi.prefabList.CheckGet(tempUi.name,psdUi.parentSetting?.prefabList).prefab;
            
             if (prefab == null)
             {
-                Debug.LogError("缺少预制体【" + tempUi.name + "】");
-                return ;
+                if (!psdUi.toPrefabUi.Contains(tempUi))
+                {
+                    psdUi.toPrefabUi.Add(tempUi);
+                }
+              
+               // Debug.LogError("缺少预制体【" + tempUi.name + "】");
+                return false;
             }
             if (UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(tempUi.gameObject))
             {
                 var prefabAsset = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource(tempUi.gameObject);
                 if (prefab == prefabAsset)
                 {
-                    return ;
+                    return true;
                 }
             }
             var instancePrefab = PrefabUtility.InstantiatePrefab(prefab, tempUi.parent) as GameObject;
@@ -370,6 +378,7 @@ namespace QTool.Psd2Ui
             ui.sizeDelta = size;
           //  destoryList.Add(tempUi.gameObject);
             GameObject.DestroyImmediate(tempUi.gameObject);
+            return true;
         }
         public static void SaveAsPrefab(this UiImportSetting psdUi, RectTransform ui)
         {
@@ -383,6 +392,7 @@ namespace QTool.Psd2Ui
                 {
                     uiPrefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.RootPath, ui.name + ".prefab"), InteractionMode.AutomatedAction);
                     psdUi.prefabList.CheckGet(ui.name).prefab=uiPrefab;
+                    psdUi.toPrefabUi.RemoveAll((item) => psdUi.ChangeToPrefab(item));
                     return;
                 }
             }
