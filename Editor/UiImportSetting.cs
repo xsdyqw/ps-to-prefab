@@ -22,7 +22,7 @@ namespace QTool.Psd2Ui
         [UnityEngine.Serialization.FormerlySerializedAs("obj")]
         public Font font;
         [Range(-0.5f,0.5f)]
-        public float YOffset;
+        public float YOffset=0;
     }
     [System.Serializable]
     public class Prefab : IKey
@@ -100,10 +100,11 @@ namespace QTool.Psd2Ui
             foreach (var layer in psd.Layers)
             {
                 var name = layer.TrueName();
-                if (layer.Name.Contains("=prefab"))
-                {
-                    prefabList.CheckGet(layer.TrueName(),parentSetting?.prefabList);
-                }else if (layer.Name.Contains("=&prefab"))
+                //if (layer.Name.Contains("=prefab"))
+                //{
+                //    prefabList.CheckGet(layer.TrueName(),parentSetting?.prefabList);
+                //}else 
+                if (layer.Name.Contains("=&prefab"))
                 {
                     prefabList.CheckGet(layer.TrueName(),parentSetting?.prefabList);
                 }

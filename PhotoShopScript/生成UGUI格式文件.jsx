@@ -1,8 +1,8 @@
 
 //复制生成新文件
-var dupoc = app.activeDocument.duplicate();
+var dupoc = app.activeDocument;//.duplicate();
 CheckLayer(dupoc);
-dupoc.close(SaveOptions.SAVECHANGES)
+//dupoc.close(SaveOptions.SAVECHANGES)
 //整理所有图层
 function CheckLayer(layer){
     if(typeof(layer) == "undefined"){

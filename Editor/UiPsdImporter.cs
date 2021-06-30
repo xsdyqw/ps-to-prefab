@@ -12,7 +12,7 @@ namespace QTool.Psd2Ui
 {
     public static class Impoter
     {
-        [MenuItem("Assets/Create/工具/psd生成UI导入设置 %u")]
+        [MenuItem("Assets/Create/工具/psd生成UI导入设置 %u",priority =0)]
         static void CreateUIImportSetting()
         {
             foreach (var obj in Selection.objects)
