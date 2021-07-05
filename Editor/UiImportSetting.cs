@@ -358,29 +358,32 @@ namespace QTool.Psd2Ui
                // Debug.LogError("»±…Ÿ‘§÷∆ÃÂ°æ" + tempUi.name + "°ø");
                 return false;
             }
-            //if (UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(tempUi.gameObject))
-            //{
-            //    var prefabAsset = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource(tempUi.gameObject);
-            //    if (prefab == prefabAsset)
-            //    {
-            //        return true;
-            //    }
-            //}
-            var instancePrefab = PrefabUtility.InstantiatePrefab(prefab, tempUi.parent) as GameObject;
-            var ui = instancePrefab.GetComponent<RectTransform>();
-            instancePrefab.transform.SetSiblingIndex(tempUi.GetSiblingIndex());
-            instancePrefab.transform.ChangeTo(tempUi);
-           // var size = ui.sizeDelta;
-           //  = tempUi.sizeDelta;
-            //ui.anchorMin = tempUi.anchorMin;
-            //ui.anchorMax = tempUi.anchorMax;
-            //ui.transform.position = tempUi.transform.position;
-            //ui.offsetMax = tempUi.offsetMax;
-            //ui.offsetMin = tempUi.offsetMin;
-          
-          //  ui.sizeDelta = size;
-          //  destoryList.Add(tempUi.gameObject);
-            GameObject.DestroyImmediate(tempUi.gameObject);
+
+            var createNew = true;
+            if (UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(tempUi.gameObject))
+            {
+                var prefabAsset = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource(tempUi.gameObject);
+                if (prefab == prefabAsset)
+                {
+                    createNew = false;
+                }
+            }
+
+
+            var ui = tempUi;
+            if (createNew)
+            {
+                var instancePrefab = PrefabUtility.InstantiatePrefab(prefab, tempUi.parent) as GameObject;
+                ui = instancePrefab.GetComponent<RectTransform>();
+                ui.SetSiblingIndex(tempUi.GetSiblingIndex());
+            }
+            ui.transform.position = tempUi.transform.position;
+            ui.ChangeTo(tempUi);
+
+            if (createNew)
+            {
+                GameObject.DestroyImmediate(tempUi.gameObject);
+            }
             return true;
         }
         public static void SaveAsPrefab(this UiImportSetting psdUi, RectTransform ui)
