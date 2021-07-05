@@ -532,9 +532,9 @@ namespace QTool.Psd2Ui
         }
         public static Text CreateText(this UiImportSetting psdUi, Layer layer, RectTransform root = null)
         {
-            var textParent= psdUi.CreateUIBase(layer, root);
+         //   var textParent= psdUi.CreateUIBase(layer, root);
             var ui = psdUi.CreateUIBase(layer, root);
-            ui.SetParent(textParent);
+          //  ui.SetParent(textParent);
             //  var tex = CreateTexture(layer);
             var text = "";
             var font = "";
@@ -558,7 +558,7 @@ namespace QTool.Psd2Ui
             }
 
             var textUi = ui.gameObject.AddComponent<Text>();
-            ui.sizeDelta += Vector2.one * 4;
+          //  ui.sizeDelta += Vector2.one * 4;
             textUi.text = text;
             var fongSetting= psdUi.fontList.CheckGet(font,psdUi.parentSetting?.fontList);
             textUi.fontSize = (int)(size * psdUi.TextScale);
