@@ -368,9 +368,9 @@ namespace QTool.Psd2Ui
             }
             var instancePrefab = PrefabUtility.InstantiatePrefab(prefab, tempUi.parent) as GameObject;
             var ui = instancePrefab.GetComponent<RectTransform>();
+            instancePrefab.transform.SetSiblingIndex(tempUi.GetSiblingIndex());
             ui.anchorMin = Vector2.one * 0.5f;
             ui.anchorMax = Vector2.one * 0.5f;
-            instancePrefab.transform.SetSiblingIndex(tempUi.GetSiblingIndex());
             instancePrefab.transform.ChangeTo(tempUi);
            // var size = ui.sizeDelta;
            //  = tempUi.sizeDelta;
@@ -430,10 +430,10 @@ namespace QTool.Psd2Ui
                 }
                 for (int i = 0; i < oldUi.childCount && i < newUI.childCount; i++)
                 {
-                    if (!UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(oldUi.GetChild(i).gameObject))
-                    {
+                    //if (!UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(oldUi.GetChild(i).gameObject))
+                    //{
                         oldUi.GetChild(i).ChangeTo(newUI.GetChild(i));
-                    }
+                   // }
                  
                 }
             }
