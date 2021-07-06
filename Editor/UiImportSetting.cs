@@ -97,14 +97,18 @@ namespace QTool.Psd2Ui
             this.psdFile = psdFile;
             prefabList.Clear();
             var psd = new PsdFile(AssetPath, new LoadContext { Encoding = System.Text.Encoding.Default });
+            List<string> baseList = new List<string>();
             foreach (var layer in psd.Layers)
             {
-                var name = layer.TrueName();
-                //if (layer.Name.Contains("=prefab"))
-                //{
-                //    prefabList.CheckGet(layer.TrueName(),parentSetting?.prefabList);
-                //}else 
-                if (layer.Name.Contains("=&prefab"))
+                if (layer.Name.Contains("=prefab"))
+                {
+                    baseList.Add(layer.TrueName());
+                }
+            }
+            foreach (var layer in psd.Layers)
+            {
+                //var name = layer.TrueName();
+                if (layer.Name.Contains("=&prefab") && !baseList.Contains(layer.TrueName())) 
                 {
                     prefabList.CheckGet(layer.TrueName(),parentSetting?.prefabList);
                 }
@@ -339,51 +343,39 @@ namespace QTool.Psd2Ui
         {
             return layer.Name.Contains("=") ? (layer.Name.Substring(0, layer.Name.IndexOf("="))) : layer.Name;
         }
-     
-       // static List<GameObject> destoryList = new List<GameObject>();
+
+        // static List<GameObject> destoryList = new List<GameObject>();
         public static bool ChangeToPrefab(this UiImportSetting psdUi, RectTransform tempUi)
         {
             if (tempUi == null) return true;
 
-        
-            var prefab = psdUi.prefabList.CheckGet(tempUi.name,psdUi.parentSetting?.prefabList).prefab;
-           
+
+            var prefab = psdUi.prefabList.CheckGet(tempUi.name, psdUi.parentSetting?.prefabList).prefab;
+
             if (prefab == null)
             {
                 if (!psdUi.toPrefabUi.Contains(tempUi))
                 {
                     psdUi.toPrefabUi.Add(tempUi);
                 }
-              
-               // Debug.LogError("缺少预制体【" + tempUi.name + "】");
+
+                // Debug.LogError("缺少预制体【" + tempUi.name + "】");
                 return false;
             }
 
-            var createNew = true;
             if (UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(tempUi.gameObject))
             {
                 var prefabAsset = UnityEditor.PrefabUtility.GetCorrespondingObjectFromOriginalSource(tempUi.gameObject);
                 if (prefab == prefabAsset)
                 {
-                    createNew = false;
+                    return true;
                 }
             }
-
-
-            var ui = tempUi;
-            if (createNew)
-            {
-                var instancePrefab = PrefabUtility.InstantiatePrefab(prefab, tempUi.parent) as GameObject;
-                ui = instancePrefab.GetComponent<RectTransform>();
-                ui.SetSiblingIndex(tempUi.GetSiblingIndex());
-            }
-            ui.transform.position = tempUi.transform.position;
+            var instancePrefab = PrefabUtility.InstantiatePrefab(prefab, tempUi.parent) as GameObject;
+            var ui = instancePrefab.GetComponent<RectTransform>();
+            ui.SetSiblingIndex(tempUi.GetSiblingIndex());
             ui.ChangeTo(tempUi);
-
-            if (createNew)
-            {
-                GameObject.DestroyImmediate(tempUi.gameObject);
-            }
+            GameObject.DestroyImmediate(tempUi.gameObject);
             return true;
         }
         public static void SaveAsPrefab(this UiImportSetting psdUi, RectTransform ui)
@@ -412,33 +404,34 @@ namespace QTool.Psd2Ui
         }
         public static void ChangeTo(this Transform oldUi, Transform newUI)
         {
-            if (oldUi.name.StartsWith( newUI.name))
+
+            Component[] coms = new Component[3];
+            coms[0] = oldUi.GetComponent<RectTransform>();
+            coms[1] = oldUi.GetComponent<Image>();
+            coms[2] = oldUi.GetComponent<Text>();
+            foreach (var com in coms)
             {
-                Component[] coms = new Component[3];
-                coms[0] = oldUi.GetComponent<RectTransform>();
-                coms[1] = oldUi.GetComponent<Image>();
-                coms[2] = oldUi.GetComponent<Text>();
-                foreach (var com in coms)
+
+                if (com == null) continue;
+                var newCom = newUI.GetComponent(com.GetType());
+                if (newCom != null)
                 {
-                    if (com == null) continue;
-                    var newCom = newUI.GetComponent(com.GetType());
-                    if (newCom != null)
-                    {
-                        UnityEditorInternal.ComponentUtility.CopyComponent(newCom);
-                        UnityEditorInternal.ComponentUtility.PasteComponentValues(com);
-                      
-                    }
+                    UnityEditorInternal.ComponentUtility.CopyComponent(newCom);
+                    UnityEditorInternal.ComponentUtility.PasteComponentValues(com);
+
                 }
-                for (int i = 0; i < oldUi.childCount && i < newUI.childCount; i++)
+            }
+            for (int i = 0; i < oldUi.childCount && i < newUI.childCount; i++)
+            {
+                if (!UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(oldUi.GetChild(i).gameObject))
                 {
-                    if (!UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(oldUi.GetChild(i).gameObject))
+                    if (oldUi.GetChild(i).name.Equals(newUI.GetChild(i).name))
                     {
                         oldUi.GetChild(i).ChangeTo(newUI.GetChild(i));
                     }
-                 
                 }
             }
-           
+
         }
         public static void Autoanchored(this UiImportSetting psdUi, RectTransform ui)
         {
