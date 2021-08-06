@@ -190,19 +190,22 @@ namespace QTool.Psd2Ui
         }
         public static LayerSectionInfo GetGroupInfo(this Layer layer)
         {
-            return layer.GetInfo("lsct") as LayerSectionInfo;
+            return layer.GetInfo("lsct", "lsdk") as LayerSectionInfo;
         }
         public static RawLayerInfo GetTextInfo(this Layer layer)
         {
             return layer.GetInfo("TySh") as RawLayerInfo;
         }
-        public static LayerInfo GetInfo(this Layer layer, string key)
+        public static LayerInfo GetInfo(this Layer layer,params string[] keys)
         {
             foreach (var info in layer.AdditionalInfo)
             {
-                if (info.Key.Equals(key))
+                foreach (var key in keys)
                 {
-                    return info;
+                    if (info.Key.Equals(key))
+                    {
+                        return info;
+                    }
                 }
             }
             return null;

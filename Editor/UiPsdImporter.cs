@@ -12,7 +12,15 @@ namespace QTool.Psd2Ui
 {
     public static class Impoter
     {
-        [MenuItem("Assets/Create/工具/psd生成UI导入设置 %u",priority =0)]
+        [MenuItem("Assets/工具/基础UI生成设置", priority = 0)]
+        static void CreateBaseUIImportSetting()
+        {
+            var uiObj = ScriptableObject.CreateInstance<BaseUiImportSetting>();
+            AssetDatabase.CreateAsset(uiObj, Path.Combine(Path.GetDirectoryName(AssetDatabase.GetAssetPath(Selection.activeObject)),  "基础UI生成设置.asset"));
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+        [MenuItem("Assets/工具/psd生成UI导入设置 %u",priority =0)]
         static void CreateUIImportSetting()
         {
             foreach (var obj in Selection.objects)
