@@ -12,12 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab2e53987e4cafe4b91e62d262a1a858, type: 3}
   m_Name: "\u6D4B\u8BD5\u9875\u97621"
   m_EditorClassIdentifier: 
-  prefabList: []
+  prefabList:
+  - key: "\u4E8C\u5468\u5E74"
+    prefab: {fileID: 7214398909028040676, guid: 58529f8d35450724bb892d6fdfe5fab6, type: 3}
+  - key: "\u4E2D\u5C42\u56FE\u6848"
+    prefab: {fileID: 3747676733256776389, guid: debc4fa06899f63479a8e38187c543b2, type: 3}
+  - key: "\u6D4B\u8BD5UI"
+    prefab: {fileID: 2752894042311530407, guid: 08b9722cf22b8f641ae58d83b834a5aa, type: 3}
   fontList: []
   uiSizeScale: 1
   textScale: 1
   autoanchoredRate: 0.1
   parentSetting: {fileID: 0}
   psdFile: {fileID: 2800000, guid: 5a1039847630a81438b1f28e6b2af763, type: 3}
-  basePrefabList: []
   toPrefabUi: []

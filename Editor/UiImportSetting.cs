@@ -60,8 +60,8 @@ namespace QTool.Psd2Ui
                 return autoanchoredRate * (parentSetting == null ? 1 : parentSetting.autoanchoredRate);
             }
         }
-        [HideInInspector] 
-        public List<Prefab> basePrefabList = new List<Prefab>();
+        //[HideInInspector] 
+        //public List<Prefab> basePrefabList = new List<Prefab>();
 
 
         public Action SavePrefabAction;
@@ -383,19 +383,19 @@ namespace QTool.Psd2Ui
         }
         public static void SaveAsPrefab(this UiImportSetting psdUi, RectTransform ui)
         {
-            var basePrefab = psdUi.basePrefabList.CheckGet(ui.name + "Base").prefab;
-            if (basePrefab == null)
-            {
-                psdUi.Autoanchored(ui);
-                psdUi.basePrefabList.CheckGet(ui.name+"Base").prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
+            //var basePrefab = psdUi.basePrefabList.CheckGet(ui.name + "Base").prefab;
+            //if (basePrefab == null)
+            //{
+            //    psdUi.Autoanchored(ui);
+            //    psdUi.basePrefabList.CheckGet(ui.name+"Base").prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(ui.gameObject, Path.Combine(psdUi.ResourcesPath, ui.name + "Base.prefab"), InteractionMode.AutomatedAction);
              
-            }
-            else
-            {
-                basePrefab.transform.ChangeTo(ui);
-                PrefabUtility.SavePrefabAsset(basePrefab);
-                psdUi.ChangeToPrefab(ui);
-            }
+            //}
+            //else
+            //{
+            //    basePrefab.transform.ChangeTo(ui);
+            //    PrefabUtility.SavePrefabAsset(basePrefab);
+            //    psdUi.ChangeToPrefab(ui);
+            //}
             var uiPrefab = psdUi.prefabList.CheckGet(ui.name, psdUi.parentSetting?.prefabList).prefab;
             if (uiPrefab == null)
             {
